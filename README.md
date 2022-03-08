@@ -1,6 +1,6 @@
 # NFT Art Generator
 
-A program that creates generative art by layering various PNG files ontop of eachother then converts the resulting image into a JPEG.
+A program that creates generative art by layering various PNG files ontop of eachother then converts the resulting image into a JPEG. A JSON file reflecting the image attributes will also be created uner the same name.
 
 The program uses the Pillow (8.1.0) library to manipulate images. This is done by layering several PNG files directly ontop of eachother then combining them into a single file.
 
@@ -8,10 +8,16 @@ For example, we will combine two saple images.
 
 Background            |  Foreground
 :-------------------------:|:-------------------------:
-![background/2.png](images/background/2.png)  |  ![foreground/2.png](images/foreground/2.png)
+![background/Office.png](files/layers/background/Office.png)  |  ![foreground/2.png](files/layers/foreground/2.png)
 
-**Result**
-![result/example.png](images/result/example.jpeg "Example")
+**Result** |
+:-------------------------:
+![results/example.png](files/results/example.jpeg "Example")
+
+The resulting JSON file (results/example.json) will be created:
+```
+{"background": "Office", "foreground": "2"}
+```
 
 ## Prerequisites
 

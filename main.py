@@ -1,6 +1,6 @@
 from PIL import Image
 from tqdm import tqdm
-import os, sys, getopt, numpy
+import os, sys, getopt, numpy, json
 
 def similar(data, history, scale, i):
 	for j in range(0, i):
@@ -14,7 +14,7 @@ def similar(data, history, scale, i):
 
 	return False
 
-def layer_images(limit, scale, reroll_limit):
+def generate(limit, scale, reroll_limit):
     features = open('layers.txt', 'r').read().splitlines()
 
     if scale < 1: 
@@ -27,7 +27,7 @@ def layer_images(limit, scale, reroll_limit):
     history, elements, rerolls = numpy.zeros((limit, len(features)), dtype=int), [], 0
 
     for f in features:
-        img_path = f'images/{f}/'
+        img_path = f'files/layers/{f}/'
         elements.append([f for f in os.listdir(img_path) if os.path.isfile(os.path.join(img_path, f))])
 
     total_combinations = len(numpy.array(numpy.meshgrid(numpy.array(elements))).flatten())
@@ -50,17 +50,25 @@ def layer_images(limit, scale, reroll_limit):
                 sys.exit()
 
         history[i-1] = combination
-        images = []
+        image, attrs = [], {}
 
         for j in range(len(features)):
-            images.append(Image.open(f'images/{features[j]}/{elements[j][combination[j]]}'))
+            attrs[features[j]] = elements[j][combination[j]].replace('.png', '')
+            image.append(Image.open(f'files/layers/{features[j]}/{elements[j][combination[j]]}'))
 
-        base_img = images.pop(0)
+        # Create JSON attribtues file
 
-        for k in images: base_img.paste(k, (0, 0), k)
+        with open(f'files/results/{i}.json', 'w') as outfile:
+            json.dump(attrs, outfile)
 
+        # Create JPEG
+
+        base_img = image.pop(0)
+
+        for k in image: base_img.paste(k, (0, 0), k)
+            
         base_img = base_img.convert('RGB')
-        base_img.save(f'images/result/{i}.jpeg')
+        base_img.save(f'files/results/{i}.jpeg')
 
 def main(argv):
     """
@@ -79,7 +87,7 @@ def main(argv):
         print('No options specified.')
         print('Usage [short]: python main.py -l 10000 -s 1 -rr 1000')
         print('Usage [long]: python main.py --limit=10000 --scale=1 --reroll_limit=1000')
-    else: layer_images(limit=limit, scale=scale, reroll_limit=reroll_limit)
+    else: generate(limit=limit, scale=scale, reroll_limit=reroll_limit)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
