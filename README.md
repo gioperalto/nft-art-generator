@@ -6,15 +6,11 @@ The program uses the Pillow (8.1.0) library to manipulate images. This is done b
 
 For example, we will combine two saple images.
 
-Background            |  Foreground
-:-------------------------:|:-------------------------:
-![background/Office.png](files/layers/background/Office.png)  |  ![foreground/2.png](files/layers/foreground/2.png)
+Background            |  Foreground | Result
+:-------------------------:|:-------------------------:|:-------------------------:
+![background/Office.png](files/layers/background/Office.png)  |  ![foreground/2.png](files/layers/foreground/2.png) | ![results/example.png](files/results/example.jpeg "Example")
 
-**Result** |
-:-------------------------:
-![results/example.png](files/results/example.jpeg "Example")
-
-The resulting JSON file (results/example.json) will be created:
+The resulting JSON file will also be created:
 ```
 {"background": "Office", "foreground": "2"}
 ```
