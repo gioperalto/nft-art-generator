@@ -66,7 +66,6 @@ def main(argv):
     """
     Parses input arguments and runs program.
     @param argv command-line arguments
-    @return target and background
     """
     limit, scale, reroll_limit = 10000, 1, 1000
     opts, args = getopt.getopt(argv,"l:s:rr:",["limit=","scale=", "reroll_limit="])
