@@ -1,5 +1,6 @@
 from PIL import Image
 from tqdm import tqdm
+from functools import reduce
 import os, sys, getopt, numpy, json
 
 def similar(data, history, scale, i):
@@ -30,7 +31,9 @@ def generate(limit, scale, reroll_limit):
         img_path = f'files/layers/{f}/'
         elements.append([f for f in os.listdir(img_path) if os.path.isfile(os.path.join(img_path, f))])
 
-    total_combinations = len(numpy.array(numpy.meshgrid(numpy.array(elements))).flatten())
+    total_combinations = 1
+    for e in elements: total_combinations *= len(e)
+
     if limit > total_combinations:
         print(f'ERROR: Limit ({limit}) cannot be greater than total number of combinations ({total_combinations}).')
         sys.exit()
@@ -53,7 +56,7 @@ def generate(limit, scale, reroll_limit):
         image, attrs = [], {}
 
         for j in range(len(features)):
-            attrs[features[j]] = elements[j][combination[j]].replace('.png', '')
+            if len(elements[j]) > 1: attrs[features[j]] = elements[j][combination[j]].replace('.png', '')
             image.append(Image.open(f'files/layers/{features[j]}/{elements[j][combination[j]]}'))
 
         # Create JSON attribtues file
